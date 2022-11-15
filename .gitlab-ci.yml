@@ -1,0 +1,30 @@
+stages:
+  - build
+  - deploy
+  
+build:
+  image: docker:20.10.16
+  stage: build
+  services:
+    - docker:20.10.16-dind
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  script:
+    - cd Docker
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+deploy:
+  image: ubuntu:latest
+  stage: deploy
+  script:
+    - apt-get update
+    - apt-get install software-properties-common -y
+    - apt-add-repository --yes --update ppa:ansible/ansible
+    - apt-get install ansible -y
+    - ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+    - rm -f ~/.ssh/id_rsa.pub
+    - echo "-----BEGIN RSA PRIVATE KEY-----" > ~/.ssh/id_rsa
+    - echo $SSH_PRIVATE_KEY | tr ' ' '\n' | tail -n+5 | head -n-4 >> ~/.ssh/id_rsa
+    - echo "-----END RSA PRIVATE KEY-----" >> ~/.ssh/id_rsa
+    - ansible-playbook stat.yaml -i hosts -u pvkarlin --private-key=~/.ssh/id_rsa

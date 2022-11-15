@@ -1,0 +1,24 @@
+---
+prometheus_exporters_common_user: prometheus
+prometheus_exporters_common_group: prometheus
+
+prometheus_exporters_common_root_dir: /opt/prometheus/exporters
+prometheus_exporters_common_dist_dir: "{{ prometheus_exporters_common_root_dir }}/dist"
+prometheus_exporters_common_log_dir: /var/log/prometheus
+prometheus_exporters_common_conf_dir: /etc/prometheus/exporters
+prometheus_exporters_common_textfile_scripts: /etc/prometheus/textfile/scripts
+prometheus_exporters_common_textfile_output: /etc/prometheus/textfile/output
+
+prometheus_node_exporter_version: 1.4.0
+prometheus_node_exporter_release_name: "node_exporter-{{ prometheus_node_exporter_version }}.linux-{{ go_arch }}"
+
+# https://github.com/prometheus/node_exporter#enabled-by-default
+prometheus_node_exporter_enabled_collectors: []
+
+# https://github.com/prometheus/node_exporter#disabled-by-default
+prometheus_node_exporter_disabled_collectors: []
+
+prometheus_node_exporter_config_flags:
+  'web.listen-address': '0.0.0.0:9100'
+  'log.level': 'info'
+

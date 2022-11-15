@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become: yes 
+  roles:
+    - setting_up_all_servers
+    - install_and_strat_prometheus_node_exporter
+
+- hosts: monitor 
+  become: yes 
+  roles:
+    - install_and_configuration_prometheus
+
+- hosts: db 
+  become: yes
+  roles: 
+    - install_postgrsql_setup_user_and_databases
+
+- hosts: minions
+  become: yes 
+  roles: 
+    - install_and_configuration_docker
+
+- hosts: proxy
+  become: yes
+  roles: 
+    -  install_and_configuration_nginx
+
+
+- hosts: minions
+  become: yes
+  roles:
+    -  pull_docker_immage_and_up_container_app

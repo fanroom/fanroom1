@@ -1,0 +1,23 @@
+{% if proxy_group %}
+upstream {{ proxy_group }} {
+{% for server in groups[proxy_group] %}    
+   server {{ server }}:1080;
+{% endfor %}
+{% endif %}   
+}
+ server {
+    server_name  {{ virtual_domain }};
+    root /var/www/{{ virtual_domain }};        
+    listen    80;
+        
+        
+    location / {
+      proxy_pass http://{{ proxy_group }};
+      proxy_set_header Host $host;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_next_upstream error timeout http_404;
+    }
+}
+

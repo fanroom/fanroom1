@@ -1,0 +1,5 @@
+container_regestry: "fanroom.gitlab.yandexcloud.net:5050"
+user_for_login: "pvkarlin"
+password: "ARMA_gidoniwe3"
+image_name: "fanroom.gitlab.yandexcloud.net:5050/pvkarlin/fanroom:main"
+

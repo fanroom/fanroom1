@@ -1,0 +1,14 @@
+[all:vars]
+ansible_ssih_user=pvkarlin 
+
+[proxy]
+10.20.30.[2:5]
+
+[db]
+10.20.30.128
+
+[monitor]
+10.20.30.[200:201]
+
+[minions]
+10.20.30.[64:127]

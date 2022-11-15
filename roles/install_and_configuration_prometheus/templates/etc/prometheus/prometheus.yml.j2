@@ -1,0 +1,16 @@
+global:
+  scrape_interval:     {{ prometheus_global_scrape_interval }} # By default, scrape targets every 15 seconds.
+  evaluation_interval: {{ prometheus_global_evaluation_interval }} # By default, scrape targets every 15 seconds.
+  scrape_timeout: {{ prometheus_global_scrape_timeout }} # By default, set timeout to 10 second.
+
+scrape_configs:
+{% if prometheus_node_exporter_group %}
+- job_name: node_exporter
+  scrape_interval: 15s
+  static_configs:
+   - targets:
+{% for server in groups[prometheus_node_exporter_group] %}
+     - {{ server }}:9100
+{% endfor %}
+{% endif %}
+

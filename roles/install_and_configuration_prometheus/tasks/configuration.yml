@@ -1,0 +1,13 @@
+---
+  notify:
+    - reload prometheus
+
+- name: copy prometheus 1st part config
+  template:
+    src: "etc/prometheus/prometheus.yml.j2"
+    dest: "{{ prometheus_config_dir }}/conf.d/prometheus.yml"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0644
+
+

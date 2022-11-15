@@ -1,0 +1,20 @@
+---
+- name: Log into private registry
+  ansible.builtin.shell:
+    cmd: docker login "{{ container_regestry }}" -u  "{{ user_for_login }}" -p "{{ password }}"
+
+- name: Pull default Docker image
+  ansible.builtin.shell:
+    cmd: docker pull "{{ image_name  }}"
+
+- name: Create docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "/home/devops/docker-compose.yml"
+    mode: 0755
+
+- name: Compose up
+  ansible.builtin.shell:
+    cmd: /usr/local/bin/docker-compose up -d
+    chdir: /home/devops/
+
